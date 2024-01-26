@@ -1,0 +1,439 @@
+{
+	"info": {
+		"_postman_id": "fc39019b-a88a-4fc8-8af6-7d3075dc74b6",
+		"name": "api_automation jenkins",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16602234",
+		"_collection_link": "https://warped-robot-772208.postman.co/workspace/lukman~7d664e01-d6ff-4bbc-b838-288fc9b6c002/collection/16602234-fc39019b-a88a-4fc8-8af6-7d3075dc74b6?action=share&source=collection_link&creator=16602234"
+	},
+	"item": [
+		{
+			"name": "create user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.globals.set(\"ran\", _.random(100, 999));\r",
+							"// Pre-request Script\r",
+							"pm.environment.set(\"initialUserId\", pm.collectionVariables.get(\"userId\"));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"id is present in the response body\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"id is stored in collection variable 'userId'\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.collectionVariables.set(\"userId\", jsonData.id);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"id is present in the response body\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"id is stored in collection variable 'userId'\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"userId\", jsonData.id);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"gender is present in the response body\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.gender).to.exist;\r",
+							"});\r",
+							"pm.test(\"status is present in the response body\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.equal(\"active\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Access_Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"name\":\"lukman olabanjo\", \r\n\"gender\":\"male\", \r\n\"email\":\"{{ran}}@yopmail.com\", \r\n\"status\":\"active\"\r\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.email).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseData.name).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseData.status).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseData.id).to.exist.and.to.be.a('number');\r",
+							"    pm.expect(responseData.gender).to.exist.and.to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Message is a non-empty string\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.message).to.not.exist;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// pm.test(\"Verify that the userId in the response matches the requested userId\", function () {\r",
+							"//     const requestedUserId = pm.variables.get(\"userId\");\r",
+							"//     const responseData = pm.response.json();\r",
+							"\r",
+							"//     pm.expect(responseData).to.be.an('object');\r",
+							"//     pm.expect(responseData.id).to.equal(parseInt(requestedUserId));\r",
+							"// });\r",
+							"\r",
+							"\r",
+							"\r",
+							"var responseJSON = pm.response.json();\r",
+							"\r",
+							"// Test the response status code\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Test the response body structure and values\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    pm.expect(responseJSON).to.be.an('object');\r",
+							"    pm.expect(responseJSON.email).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseJSON.name).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseJSON.status).to.exist.and.to.be.a('string');\r",
+							"    pm.expect(responseJSON.id).to.exist.and.to.be.a('number');\r",
+							"    pm.expect(responseJSON.gender).to.exist.and.to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"// Test that the message property does not exist\r",
+							"pm.test(\"Message is a non-empty string\", function () {\r",
+							"    pm.expect(responseJSON.message).to.not.exist;\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.globals.set(\"ran\", _.random(100, 999));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Access_Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\":\"Allasani Peddana\", \r\n\"email\":\"tes{{ran}}@yopmail.com\", \r\n\"status\":\"active\"\r\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response is an array with at least one element\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('array').and.to.have.lengthOf.at.least(1);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Email in each object is in a valid email format\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"\r",
+							"    responseData.forEach(function (user) {\r",
+							"        pm.expect(user.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Name in each object is a non-empty string\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"\r",
+							"    responseData.forEach(function (user) {\r",
+							"        pm.expect(user.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+							"\r",
+							"    responseData.forEach(function (user) {\r",
+							"        pm.expect(user).to.have.property('id');\r",
+							"        pm.expect(user).to.have.property('name');\r",
+							"        pm.expect(user).to.have.property('email');\r",
+							"        pm.expect(user).to.have.property('gender');\r",
+							"        pm.expect(user).to.have.property('status');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Each ID is a non-negative integer\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"\r",
+							"    responseData.forEach(function (user) {\r",
+							"        pm.expect(user.id).to.be.a('number').and.to.be.at.least(0, \"ID should be a non-negative integer\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Gender in each object is either 'male' or 'female'\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"\r",
+							"    responseData.forEach(function (user) {\r",
+							"        pm.expect(user.gender).to.be.oneOf(['male', 'female']);\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status in each object is either 'active' or 'inactive'\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"\r",
+							"    responseData.forEach(function (user) {\r",
+							"        pm.expect(user.status).to.be.oneOf(['active', 'inactive']);\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is within acceptable range\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Access_Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"pm.test(\"Successful Delete request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([204, 202]);\r",
+							"});\r",
+							"pm.test(\"Status code name has string\", function () {\r",
+							"    pm.response.to.have.status(\"No Content\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Access_Token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/users/{{userId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://gorest.co.in/public/v2"
+		},
+		{
+			"key": "Access_Token",
+			"value": "9987355ab9d384fe57f92728a5b789c835e373965d80be18c91427c3e536234b"
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "initialUserId",
+			"value": ""
+		}
+	]
+}
